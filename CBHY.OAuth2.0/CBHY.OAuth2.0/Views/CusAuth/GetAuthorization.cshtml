@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "GetAuthorization";
+}
+
+<input type="button" id="GetName" name="GetName" value="GetName" />
+
+<script type="text/javascript">
+    $("#GetName").on("click", function () {
+        $.ajax({
+            type: "post",
+            url: "/CusAuth/GetName"
+        })
+        .done(function (data) {
+            alert(data);
+        })
+    });
+</script>
+

@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewBag.Title = "LogOn";
+}
+@using(Html.BeginForm("AjaxLogOn","Home"))
+{ 
+    <input type="text" name="returnUrl" value="@Html.Raw(ViewBag.ReturnUrl)" />
+    <input type="submit"  value="登录"/>
+}
+
