@@ -1,5 +1,5 @@
 ﻿using CHY.BaseFramework.DAL;
-using DotNetOpenAuth.Messaging.Bindings;
+using CHY.OAuth2.Core.Messaging.Bindings;
 using OAuth2.Models.CHYAuth;
 using System;
 using System.Collections.Generic;

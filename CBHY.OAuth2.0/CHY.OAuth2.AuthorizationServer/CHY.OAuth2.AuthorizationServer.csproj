@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{423DB519-7983-4F25-8F6F-518720D55941}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CHY.OAuth2.AuthorizationServer</RootNamespace>
+    <AssemblyName>CHY.OAuth2.AuthorizationServer</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Configuration\OAuth2AuthorizationServerSection.cs" />
+    <Compile Include="OAuth2\AuthorizationServer.cs" />
+    <Compile Include="OAuth2\AuthorizationServerAccessToken.cs" />
+    <Compile Include="OAuth2\AuthServerStrings.Designer.cs" />
+    <Compile Include="OAuth2\AuthServerUtilities.cs" />
+    <Compile Include="OAuth2\AutomatedAuthorizationCheckResponse.cs" />
+    <Compile Include="OAuth2\AutomatedUserAuthorizationCheckResponse.cs" />
+    <Compile Include="OAuth2\ChannelElements\AggregatingClientCredentialReader.cs" />
+    <Compile Include="OAuth2\ChannelElements\AuthorizationCode.cs" />
+    <Compile Include="OAuth2\ChannelElements\AuthServerBindingElementBase.cs" />
+    <Compile Include="OAuth2\ChannelElements\ClientAuthenticationModule.cs" />
+    <Compile Include="OAuth2\ChannelElements\ClientCredentialHttpBasicReader.cs" />
+    <Compile Include="OAuth2\ChannelElements\ClientCredentialMessagePartReader.cs" />
+    <Compile Include="OAuth2\ChannelElements\IOAuth2ChannelWithAuthorizationServer.cs" />
+    <Compile Include="OAuth2\ChannelElements\MessageValidationBindingElement.cs" />
+    <Compile Include="OAuth2\ChannelElements\OAuth2AuthorizationServerChannel.cs" />
+    <Compile Include="OAuth2\ChannelElements\RefreshToken.cs" />
+    <Compile Include="OAuth2\ChannelElements\TokenCodeSerializationBindingElement.cs" />
+    <Compile Include="OAuth2\IAuthorizationServerHost.cs" />
+    <Compile Include="OAuth2\Messages\AccessTokenAuthorizationCodeRequestAS.cs" />
+    <Compile Include="OAuth2\Messages\AccessTokenRefreshRequestAS.cs" />
+    <Compile Include="OAuth2\Messages\AccessTokenResult.cs" />
+    <Compile Include="OAuth2\Messages\EndUserAuthorizationSuccessAuthCodeResponseAS.cs" />
+    <Compile Include="OAuth2\Messages\IAuthorizationCodeCarryingRequest.cs" />
+    <Compile Include="OAuth2\Messages\IRefreshTokenCarryingRequest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CHY.OAuth2.ClientAuthorization\CHY.OAuth2.ClientAuthorization.csproj">
+      <Project>{021cf292-b3af-4575-819e-c18ed7f3bff5}</Project>
+      <Name>CHY.OAuth2.ClientAuthorization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CHY.OAuth2\CHY.OAuth2.csproj">
+      <Project>{1d575fa2-9fe7-4582-b1a8-998ef81badf1}</Project>
+      <Name>CHY.OAuth2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CHY.OAutho2.Core\CHY.OAuth2.Core.csproj">
+      <Project>{9511d48f-feeb-4311-9483-e4acac1c16c0}</Project>
+      <Name>CHY.OAuth2.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="OAuth2\AuthServerStrings.en-GB.resx" />
+    <EmbeddedResource Include="OAuth2\AuthServerStrings.resx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9511D48F-FEEB-4311-9483-E4ACAC1C16C0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CHY.OAuth2.Core</RootNamespace>
+    <AssemblyName>CHY.OAuth2.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assumes.cs" />
+    <Compile Include="Common\LibLog.cs" />
+    <Compile Include="Configuration\DotNetOpenAuthSection.cs" />
+    <Compile Include="Configuration\HostNameElement.cs" />
+    <Compile Include="Configuration\HostNameOrRegexCollection.cs" />
+    <Compile Include="Configuration\TypeConfigurationCollection.cs" />
+    <Compile Include="Messaging\Bindings\CryptoKey.cs" />
+    <Compile Include="Messaging\Bindings\CryptoKeyCollisionException.cs" />
+    <Compile Include="Messaging\Bindings\ExpiredMessageException.cs" />
+    <Compile Include="Messaging\Bindings\ICryptoKeyStore.cs" />
+    <Compile Include="Messaging\Bindings\INonceStore.cs" />
+    <Compile Include="Messaging\Bindings\ReplayedMessageException.cs" />
+    <Compile Include="Messaging\Channel.cs" />
+    <Compile Include="Messaging\ChannelEventArgs.cs" />
+    <Compile Include="Messaging\DataBag.cs" />
+    <Compile Include="Messaging\DataBagFormatterBase.cs" />
+    <Compile Include="Messaging\EnumerableCacheExtension.cs" />
+    <Compile Include="Messaging\HmacAlgorithms.cs" />
+    <Compile Include="Messaging\HttpRequestHeaders.cs" />
+    <Compile Include="Messaging\HttpResponseMessageWithOriginal.cs" />
+    <Compile Include="Messaging\IChannelBindingElement.cs" />
+    <Compile Include="Messaging\IDataBagFormatter.cs" />
+    <Compile Include="Messaging\IHttpDirectResponse.cs" />
+    <Compile Include="Messaging\IHttpIndirectResponse.cs" />
+    <Compile Include="Messaging\IMessageFactory.cs" />
+    <Compile Include="Messaging\IMessageOriginalPayload.cs" />
+    <Compile Include="Messaging\IMessageWithBinaryData.cs" />
+    <Compile Include="Messaging\IMessageWithEvents.cs" />
+    <Compile Include="Messaging\MessageProtectionTasks.cs" />
+    <Compile Include="Messaging\MessageSerializer.cs" />
+    <Compile Include="Messaging\MessagingStrings.Designer.cs" />
+    <Compile Include="Messaging\MessagingUtilities.cs" />
+    <Compile Include="Messaging\MessageReceivingEndpoint.cs" />
+    <Compile Include="Messaging\MultipartContentMember.cs" />
+    <Compile Include="Messaging\Reflection\DefaultEncoderAttribute.cs" />
+    <Compile Include="Messaging\Reflection\IMessagePartEncoder.cs" />
+    <Compile Include="Messaging\Reflection\IMessagePartFormattingEncoder.cs" />
+    <Compile Include="Messaging\Reflection\IMessagePartNullEncoder.cs" />
+    <Compile Include="Messaging\Reflection\IMessagePartOriginalEncoder.cs" />
+    <Compile Include="Messaging\Reflection\MessageDescription.cs" />
+    <Compile Include="Messaging\Reflection\MessageDescriptionCollection.cs" />
+    <Compile Include="Messaging\Reflection\MessageDictionary.cs" />
+    <Compile Include="Configuration\MessagingElement.cs" />
+    <Compile Include="Configuration\ReportingElement.cs" />
+    <Compile Include="Configuration\TypeConfigurationElement.cs" />
+    <Compile Include="Configuration\UntrustedWebRequestElement.cs" />
+    <Compile Include="IEmbeddedResourceRetrieval.cs" />
+    <Compile Include="IHostFactories.cs" />
+    <Compile Include="IRequireHostFactories.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Messaging\ErrorUtilities.cs" />
+    <Compile Include="Messaging\HostErrorException.cs" />
+    <Compile Include="Messaging\HttpDeliveryMethods.cs" />
+    <Compile Include="Messaging\IDirectedProtocolMessage.cs" />
+    <Compile Include="Messaging\IDirectResponseProtocolMessage.cs" />
+    <Compile Include="Messaging\IHttpDirectRequest.cs" />
+    <Compile Include="Messaging\IMessage.cs" />
+    <Compile Include="Messaging\InternalErrorException.cs" />
+    <Compile Include="Messaging\IProtocolMessage.cs" />
+    <Compile Include="Messaging\MessageProtections.cs" />
+    <Compile Include="Messaging\MessageTransport.cs" />
+    <Compile Include="Messaging\ProtocolException.cs" />
+    <Compile Include="Messaging\MessagePartAttribute.cs" />
+    <Compile Include="Messaging\StandardMessageFactory.cs" />
+    <Compile Include="Messaging\StandardMessageFactoryChannel.cs" />
+    <Compile Include="Messaging\TimespanSecondsEncoder.cs" />
+    <Compile Include="Messaging\TimestampEncoder.cs" />
+    <Compile Include="Messaging\UnprotectedMessageException.cs" />
+    <Compile Include="Messaging\UriStyleMessageFormatter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Messaging\Reflection\MessagePart.cs" />
+    <Compile Include="Messaging\Reflection\ValueMapping.cs" />
+    <Compile Include="Strings.Designer.cs" />
+    <Compile Include="UriUtil.cs" />
+    <Compile Include="Util.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Messaging\MessagingStrings.en-GB.resx" />
+    <EmbeddedResource Include="Messaging\MessagingStrings.resx" />
+    <EmbeddedResource Include="Messaging\MessagingStrings.sr.resx" />
+    <EmbeddedResource Include="Strings.en-GB.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Strings.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Strings.sr.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,17 +1,22 @@
-﻿using DotNetOpenAuth.OAuth2;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using DotNetOpenAuth.Messaging;
 using CBHY.OAuth2.AuthorizetionServer.Code;
+using CHY.OAuth2.Core.Messaging;
 using System.Net;
 using CHY.BaseFramework.DAL;
 using OAuth2.Models.CHYAuth;
 using OAuthAuthorizationServer.Code;
 using CBHY.OAuth2.AuthorizetionServer.Models;
 using CHY.BaseFramework.Authorization;
+using CHY.OAuth2.AuthorizationServer.OAuth2;
+using System.Net.Http;
+using CHY.OAuth2.Mvc;
+using System.Threading.Tasks;
+using CHY.OAuth2.ClientAuthorization.OAuth2.Messages;
+using CHY.OAuth2.OAuth2;
 
 namespace CBHY.OAuth2.AuthorizetionServer.Controllers
 {
@@ -32,14 +37,16 @@ namespace CBHY.OAuth2.AuthorizetionServer.Controllers
             m_ClientAuthRep = clientAuthRep;
         }
 
-        public ActionResult Token()
+        public async Task<ActionResult> Token()
         {
-            return this.m_AuthorizationServer.HandleTokenRequest(this.Request).AsActionResult();
+            var request = await m_AuthorizationServer.HandleTokenRequestAsync(this.Request, this.Response.ClientDisconnectedToken);
+            Response.ContentType = request.Content.Headers.ContentType.ToString();
+            return request.AsActionResult();
         }
 
-        public ActionResult Authorize()
+        public async Task<ActionResult> Authorize()
         {
-            var pendingRequest = this.m_AuthorizationServer.ReadAuthorizationRequest();
+            EndUserAuthorizationRequest pendingRequest = await this.m_AuthorizationServer.ReadAuthorizationRequestAsync(Request, Response.ClientDisconnectedToken);
             if(pendingRequest == null)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, "Missing authorization request");
@@ -50,7 +57,9 @@ namespace CBHY.OAuth2.AuthorizetionServer.Controllers
             {
                 var approval = this.m_AuthorizationServer.PrepareApproveAuthorizationRequest(pendingRequest, HttpContext.User.Identity.Name);
 
-                return this.m_AuthorizationServer.Channel.PrepareResponse(approval).AsActionResult();
+                var response = await this.m_AuthorizationServer.Channel.PrepareResponseAsync(approval, Response.ClientDisconnectedToken);
+                Response.ContentType = response.Content.Headers.ContentType.ToString();
+                return response.AsActionResult();
             }
 
             var model = new AccountAuthorizeModel
@@ -64,9 +73,9 @@ namespace CBHY.OAuth2.AuthorizetionServer.Controllers
         }
 
         [HttpPost]
-        public ActionResult AuthorizeResponse(bool isApproved)
+        public async Task<ActionResult> AuthorizeResponse(bool isApproved)
         {
-            var pendingRequest = this.m_AuthorizationServer.ReadAuthorizationRequest();
+            var pendingRequest = await this.m_AuthorizationServer.ReadAuthorizationRequestAsync(Request, Response.ClientDisconnectedToken);
             if (pendingRequest == null)
             {
                 throw new HttpException((int)HttpStatusCode.BadRequest, "Missing authorization request.");
@@ -91,8 +100,9 @@ namespace CBHY.OAuth2.AuthorizetionServer.Controllers
             {
                 response = this.m_AuthorizationServer.PrepareRejectAuthorizationRequest(pendingRequest);
             }
-
-            return this.m_AuthorizationServer.Channel.PrepareResponse(response).AsActionResult();
+            var res = await this.m_AuthorizationServer.Channel.PrepareResponseAsync(response, Response.ClientDisconnectedToken);
+            Response.ContentType = res.Content.Headers.ContentType.ToString();
+            return res.AsActionResult();
         }
     }
 }

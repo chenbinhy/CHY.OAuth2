@@ -1,4 +1,4 @@
-﻿using DotNetOpenAuth.OAuth2.Messages;
+﻿using CHY.OAuth2.ClientAuthorization.OAuth2.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;

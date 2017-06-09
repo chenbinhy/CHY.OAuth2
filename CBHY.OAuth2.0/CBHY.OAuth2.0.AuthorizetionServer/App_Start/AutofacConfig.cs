@@ -4,7 +4,7 @@ using CBHY.OAuth2.AuthorizetionServer.Code;
 using CHY.BaseFramework;
 using CHY.BaseFramework.DAL;
 using CHY.Framework.SqlServer;
-using DotNetOpenAuth.OAuth2;
+using CHY.OAuth2.AuthorizationServer.OAuth2;
 using OAuthAuthorizationServer.Code;
 using System;
 using System.Collections.Generic;

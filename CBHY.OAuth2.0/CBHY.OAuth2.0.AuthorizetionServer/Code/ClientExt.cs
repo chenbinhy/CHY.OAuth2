@@ -1,5 +1,5 @@
-﻿using DotNetOpenAuth.Messaging;
-using DotNetOpenAuth.OAuth2;
+﻿using CHY.OAuth2.ClientAuthorization.OAuth2;
+using CHY.OAuth2.Core.Messaging;
 using OAuth2.Models.CHYAuth;
 using System;
 using System.Collections.Generic;

@@ -42,18 +42,6 @@
     <Reference Include="CHY.BaseFramework">
       <HintPath>..\packages\CHY.Framework\CHY.BaseFramework.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.Core">
-      <HintPath>..\packages\DotNetOpenAuth.Core.4.3.4.13329\lib\net45-full\DotNetOpenAuth.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.OAuth2">
-      <HintPath>..\packages\DotNetOpenAuth.OAuth2.Core.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OAuth2.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.OAuth2.Client">
-      <HintPath>..\packages\DotNetOpenAuth.OAuth2.Client.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OAuth2.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.OAuth2.ClientAuthorization">
-      <HintPath>..\packages\DotNetOpenAuth.OAuth2.ClientAuthorization.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OAuth2.ClientAuthorization.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -199,6 +187,31 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CHY.OAuth2.ClientAuthorization\CHY.OAuth2.ClientAuthorization.csproj">
+      <Project>{021cf292-b3af-4575-819e-c18ed7f3bff5}</Project>
+      <Name>CHY.OAuth2.ClientAuthorization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CHY.OAuth2.Client\CHY.OAuth2.Client.csproj">
+      <Project>{3c6b8451-c065-49f3-880f-840fd9817951}</Project>
+      <Name>CHY.OAuth2.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CHY.OAuth2.Mvc\CHY.OAuth2.Mvc.csproj">
+      <Project>{8149f7d4-8d2f-46e4-b1f8-bcf5a00fd032}</Project>
+      <Name>CHY.OAuth2.Mvc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CHY.OAuth2\CHY.OAuth2.csproj">
+      <Project>{1d575fa2-9fe7-4582-b1a8-998ef81badf1}</Project>
+      <Name>CHY.OAuth2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CHY.OAutho2.Core\CHY.OAuth2.Core.csproj">
+      <Project>{9511d48f-feeb-4311-9483-e4acac1c16c0}</Project>
+      <Name>CHY.OAuth2.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

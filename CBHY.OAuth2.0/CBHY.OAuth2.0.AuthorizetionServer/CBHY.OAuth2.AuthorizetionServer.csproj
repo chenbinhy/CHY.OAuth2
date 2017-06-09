@@ -66,18 +66,6 @@
     <Reference Include="Dapper">
       <HintPath>..\packages\Dapper.1.50.2\lib\net45\Dapper.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.Core">
-      <HintPath>..\packages\DotNetOpenAuth.Core.4.3.4.13329\lib\net45-full\DotNetOpenAuth.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.OAuth2">
-      <HintPath>..\packages\DotNetOpenAuth.OAuth2.Core.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OAuth2.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.OAuth2.AuthorizationServer">
-      <HintPath>..\packages\DotNetOpenAuth.OAuth2.AuthorizationServer.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OAuth2.AuthorizationServer.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.OAuth2.ClientAuthorization">
-      <HintPath>..\packages\DotNetOpenAuth.OAuth2.ClientAuthorization.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OAuth2.ClientAuthorization.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -221,6 +209,26 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CHY.OAuth2.AuthorizationServer\CHY.OAuth2.AuthorizationServer.csproj">
+      <Project>{423db519-7983-4f25-8f6f-518720d55941}</Project>
+      <Name>CHY.OAuth2.AuthorizationServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CHY.OAuth2.ClientAuthorization\CHY.OAuth2.ClientAuthorization.csproj">
+      <Project>{021cf292-b3af-4575-819e-c18ed7f3bff5}</Project>
+      <Name>CHY.OAuth2.ClientAuthorization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CHY.OAuth2.Mvc\CHY.OAuth2.Mvc.csproj">
+      <Project>{8149f7d4-8d2f-46e4-b1f8-bcf5a00fd032}</Project>
+      <Name>CHY.OAuth2.Mvc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CHY.OAuth2\CHY.OAuth2.csproj">
+      <Project>{1d575fa2-9fe7-4582-b1a8-998ef81badf1}</Project>
+      <Name>CHY.OAuth2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CHY.OAutho2.Core\CHY.OAuth2.Core.csproj">
+      <Project>{9511d48f-feeb-4311-9483-e4acac1c16c0}</Project>
+      <Name>CHY.OAuth2.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OAuth2.Model.CHYAuth\OAuth2.Model.CHYAuth.csproj">
       <Project>{553dc333-75fd-42c2-b3df-f06d8d14f648}</Project>
       <Name>OAuth2.Model.CHYAuth</Name>

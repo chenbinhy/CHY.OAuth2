@@ -1,5 +1,6 @@
 ﻿using CBHY.OAuth2.Models;
-using DotNetOpenAuth.OAuth2;
+using CHY.OAuth2.Client.OAuth2;
+using CHY.OAuth2.Core.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,12 +8,13 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
 namespace CBHY.OAuth2.Controllers
 {
-    public class CusAuthController : Controller
+    public class CusAuthController : AsyncController
     {
         private List<AuthItemModel> m_AuthItemModelList;
         /// <summary>
@@ -66,11 +68,11 @@ namespace CBHY.OAuth2.Controllers
             return View();
         }
 
-        public void GetAuthorization(string code)
+        public async Task GetAuthorization(string code)
         {
              if(!string.IsNullOrEmpty(code))
             {
-                var authorization = Client.ProcessUserAuthorization();
+                var authorization = await Client.ProcessUserAuthorizationAsync(Request, Response.ClientDisconnectedToken);
                 if (authorization != null)
                 {
                     // We are receiving an authorization response.  Store it and associate it with this user.
@@ -92,17 +94,19 @@ namespace CBHY.OAuth2.Controllers
                 }
             }
             string[] scopes = new string[] { "https://resourceserver.oauth.com/api/Person/Name", "https://resourceserver.oauth.com/api/Person/Age" };
-            Client.RequestUserAuthorization(scopes);
+            var request = await Client.PrepareRequestUserAuthorizationAsync(scopes,cancellationToken:Response.ClientDisconnectedToken);
+            await request.SendAsync();
+            this.HttpContext.Response.End();
         }
 
-        public JsonResult GetName()
+        public async Task<JsonResult> GetName()
         {
-            string result = this.CallService("https://resourceserver.oauth.com/api/Person/Name");
+            string result = await this.CallService("https://resourceserver.oauth.com/api/Person/Name");
 
             return Json(result);
         }
 
-        private string CallService(string url)
+        private async Task<string> CallService(string url)
         {
             if (Authorization == null)
             {
@@ -112,7 +116,7 @@ namespace CBHY.OAuth2.Controllers
             if(Authorization.AccessTokenExpirationUtc.HasValue)
             {
                 // 刷新access token
-                Client.RefreshAuthorization(Authorization, TimeSpan.FromSeconds(30));
+                await Client.RefreshAuthorizationAsync(Authorization, TimeSpan.FromSeconds(30));
             }
 
             var httpRequest = (HttpWebRequest)WebRequest.Create(url);

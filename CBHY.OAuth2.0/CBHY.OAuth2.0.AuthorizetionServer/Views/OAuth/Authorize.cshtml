@@ -9,8 +9,9 @@
     @Html.Hidden("IsApproved", true)
     @Html.Hidden("client_id", Model.AuthorizationRequest.ClientIdentifier)
     @Html.Hidden("redirect_uri", Model.AuthorizationRequest.Callback)
-    @Html.Hidden("state", DotNetOpenAuth.OAuth2.OAuthUtilities.JoinScopes(Model.AuthorizationRequest.Scope))
-    @Html.Hidden("response_type", Model.AuthorizationRequest.ResponseType == DotNetOpenAuth.OAuth2.Messages.EndUserAuthorizationResponseType.AccessToken ? "token" : "code")
+    @Html.Hidden("state", Model.AuthorizationRequest.ClientState)
+    @Html.Hidden("scope", CHY.OAuth2.OAuth2.OAuthUtilities.JoinScopes(Model.AuthorizationRequest.Scope))
+    @Html.Hidden("response_type", Model.AuthorizationRequest.ResponseType == CHY.OAuth2.ClientAuthorization.OAuth2.Messages.EndUserAuthorizationResponseType.AccessToken ? "token" : "code")
     <input type="submit" value="确认授权" />
 }
 

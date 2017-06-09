@@ -1,18 +1,21 @@
-﻿namespace OAuthAuthorizationServer.Code {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Security.Cryptography;
-	using System.Web;
-	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.Messaging.Bindings;
-	using DotNetOpenAuth.OAuth2;
-	using DotNetOpenAuth.OAuth2.ChannelElements;
-	using DotNetOpenAuth.OAuth2.Messages;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Web;
 using CHY.BaseFramework.DAL;
 using CBHY.OAuth2.AuthorizetionServer.Code;
 using OAuth2.Models.CHYAuth;
-    using CBHY.OAuth2.AuthorizetionServer.Code;
+using CBHY.OAuth2.AuthorizetionServer.Code;
+using CHY.OAuth2.ClientAuthorization.OAuth2.Messages;
+using CHY.OAuth2.AuthorizationServer.OAuth2;
+using CHY.OAuth2.Core.Messaging.Bindings;
+using CHY.OAuth2.AuthorizationServer.OAuth2.Messages;
+using CHY.OAuth2.ClientAuthorization.OAuth2;
+using CHY.OAuth2.OAuth2.ChannelElements;
+using CHY.OAuth2.OAuth2;
+
+namespace OAuthAuthorizationServer.Code {
 
 	internal class OAuth2AuthorizationServer : IAuthorizationServerHost {
         private DatabaseKeyNonceStore m_KeyNonceStore;
