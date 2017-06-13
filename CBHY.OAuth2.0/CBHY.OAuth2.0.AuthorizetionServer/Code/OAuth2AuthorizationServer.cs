@@ -191,7 +191,7 @@ namespace OAuthAuthorizationServer.Code {
                         INNER JOIN Client C ON CA.ClientId = C.ClientId
                         INNER JOIN [User] U ON CA.UserId = U.UserId
                         WHERE C.ClientIdentifier = '{0}' AND CA.CreatedOnUtc <= '{1}' AND
-                        (CA.ExpirationDateUtc IS NOT null AND CA.ExpirationDateUtc >= '{2}')
+                        (CA.ExpirationDateUtc Is null OR CA.ExpirationDateUtc >= '{2}')
                         AND U.OpenIDClaimedIdentifier = '{3}'", clientIdentifier, issuedUtc, DateTime.UtcNow, username);
             var grantedScopeStrings = m_ClientRep.Query<string>(sql, null);
 			if (!grantedScopeStrings.Any()) {

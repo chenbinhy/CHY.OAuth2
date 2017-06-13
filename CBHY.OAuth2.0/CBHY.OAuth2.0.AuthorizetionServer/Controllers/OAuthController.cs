@@ -37,9 +37,18 @@ namespace CBHY.OAuth2.AuthorizetionServer.Controllers
             m_ClientAuthRep = clientAuthRep;
         }
 
+       [AllowAnonymous]
         public async Task<ActionResult> Token()
         {
-            var request = await m_AuthorizationServer.HandleTokenRequestAsync(this.Request, this.Response.ClientDisconnectedToken);
+            HttpResponseMessage request = null;
+            try
+            {
+                request = await m_AuthorizationServer.HandleTokenRequestAsync(this.Request, this.Response.ClientDisconnectedToken);
+            }
+           catch(Exception ex)
+            {
+                throw ex;
+            }
             Response.ContentType = request.Content.Headers.ContentType.ToString();
             return request.AsActionResult();
         }

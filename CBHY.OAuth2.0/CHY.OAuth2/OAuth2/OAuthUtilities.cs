@@ -14,7 +14,7 @@ namespace CHY.OAuth2.OAuth2
         public static readonly StringComparer ScopeStringComparer = StringComparer.Ordinal;
         private const string HttpBasicAuthScheme = "Basic";
         private static readonly char[] scopeDelimiter = new char[] { ' ' };
-        private static readonly char[] ColonSeparator = new char[] { ';' };
+        private static readonly char[] ColonSeparator = new char[] { ':' };
         private static readonly Encoding HttpBasicEncoding = Encoding.UTF8;
         private static string accessTokenAuthorizationHeaderAllowedCharacters = MessagingUtilities.UppercaseLetters +
             MessagingUtilities.LowercaseLetters +

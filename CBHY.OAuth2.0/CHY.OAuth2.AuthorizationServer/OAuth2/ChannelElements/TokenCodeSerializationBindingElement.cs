@@ -1,6 +1,7 @@
 ﻿using CHY.OAuth2.AuthorizationServer.OAuth2.Messages;
 using CHY.OAuth2.ClientAuthorization.OAuth2.Messages;
 using CHY.OAuth2.Core.Messaging;
+using CHY.OAuth2.OAuth2.ChannelElements;
 using CHY.OAutho2.Core.Messaging;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2.ChannelElements
             var refreshTokenResponse = message as AccessTokenSuccessResponse;
             if(refreshTokenResponse != null && refreshTokenResponse.HasRefreshToken)
             {
-                var refreshTokenCarrier = (IAuthorizationCodeCarryingRequest)message;
+                var refreshTokenCarrier = (IAuthorizationCarryingRequest)message;
                 var refreshToken = new RefreshToken(refreshTokenCarrier.AuthorizationDescription);
                 var refreshTokenFormatter = RefreshToken.CreateFormatter(this.AuthorizationServer.CryptoKeyStore);
                 refreshTokenResponse.RefreshToken = refreshTokenFormatter.Serialize(refreshToken);

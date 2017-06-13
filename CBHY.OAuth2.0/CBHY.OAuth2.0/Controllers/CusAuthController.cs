@@ -72,12 +72,21 @@ namespace CBHY.OAuth2.Controllers
         {
              if(!string.IsNullOrEmpty(code))
             {
-                var authorization = await Client.ProcessUserAuthorizationAsync(Request, Response.ClientDisconnectedToken);
+                IAuthorizationState authorization = null;
+                try
+                {
+                    authorization = await Client.ProcessUserAuthorizationAsync(Request, Response.ClientDisconnectedToken);
+                }
+                 catch(Exception ex)
+                {
+                    throw ex;
+                }
                 if (authorization != null)
                 {
                     // We are receiving an authorization response.  Store it and associate it with this user.
                     Authorization = authorization;
-                    Response.Redirect(Request.Path); // get rid of the /?code= parameter
+                    //Response.Redirect(Request.Path); // get rid of the /?code= parameter
+                    Response.Redirect("/CusAuth/AuthSuccess");
                 }
             }
 
@@ -97,6 +106,11 @@ namespace CBHY.OAuth2.Controllers
             var request = await Client.PrepareRequestUserAuthorizationAsync(scopes,cancellationToken:Response.ClientDisconnectedToken);
             await request.SendAsync();
             this.HttpContext.Response.End();
+        }
+
+        public ActionResult AuthSuccess()
+        {
+            return View();
         }
 
         public async Task<JsonResult> GetName()

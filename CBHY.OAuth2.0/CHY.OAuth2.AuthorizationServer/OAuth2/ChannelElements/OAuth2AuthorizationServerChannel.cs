@@ -70,8 +70,8 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2.ChannelElements
                 }
                 return (IDirectedProtocolMessage)this.Receive(fields, recipient);
             }
-
-            return await base.ReadFromRequestCoreAsync(request, cancellationToken);
+            var result = await base.ReadFromRequestCoreAsync(request, cancellationToken);
+            return result;
         }
 
         private static IChannelBindingElement[] InitializeBindingElements(IAuthorizationServerHost authorizationServer, ClientAuthenticationModule clientAuthenticationModule)

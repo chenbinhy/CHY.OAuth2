@@ -447,8 +447,10 @@ namespace CHY.OAuth2.Core.Messaging
                 Logger.Messaging.WarnFormat("Unrecognized HTTP request: {0}", ex);
                 return null;
             }
-
-            return (IDirectedProtocolMessage)this.Receive(fields, recipient);
+            IDirectedProtocolMessage result = null;
+            result = (IDirectedProtocolMessage)this.Receive(fields, recipient);
+              
+            return result;
         }
 
         protected virtual IProtocolMessage Receive(Dictionary<string,string> fields, MessageReceivingEndpoint recipient)
