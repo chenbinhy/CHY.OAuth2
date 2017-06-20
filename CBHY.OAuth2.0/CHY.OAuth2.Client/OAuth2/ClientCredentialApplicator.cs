@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace CHY.OAuth2.Client.OAuth2
 {
+    /// <summary>
+    /// 客户端凭据
+    /// </summary>
     public abstract class ClientCredentialApplicator
     {
         protected ClientCredentialApplicator()
@@ -45,6 +48,9 @@ namespace CHY.OAuth2.Client.OAuth2
         { 
         }
 
+        /// <summary>
+        /// 网络凭据
+        /// </summary>
         private class NetworkCredentialApplicator : ClientCredentialApplicator 
         {
             private readonly NetworkCredential credential;

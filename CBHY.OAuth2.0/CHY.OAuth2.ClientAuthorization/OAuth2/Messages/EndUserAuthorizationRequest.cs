@@ -14,8 +14,14 @@ using CHY.OAuth2.ClientAuthorization.OAuth2.ChannelElements;
 
 namespace CHY.OAuth2.ClientAuthorization.OAuth2.Messages
 {
+    /// <summary>
+    /// 授权请求
+    /// </summary>
     public class EndUserAuthorizationRequest:MessageBase
     {
+        /// <summary>
+        /// 响应类型
+        /// </summary>
         [MessagePart(Protocol.response_type, IsRequired = true, Encoder = typeof(EndUserAuthorizationResponseTypeEncoder))]
         private const EndUserAuthorizationResponseType ResponseTypeConst = EndUserAuthorizationResponseType.AuthorizationCode;
 
@@ -26,20 +32,35 @@ namespace CHY.OAuth2.ClientAuthorization.OAuth2.Messages
             this.Scope = new HashSet<string>(OAuthUtilities.ScopeStringComparer);
         }
 
+        /// <summary>
+        /// 响应类型
+        /// </summary>
         public virtual EndUserAuthorizationResponseType ResponseType
         {
             get { return ResponseTypeConst; }
         }
 
+        /// <summary>
+        /// 客户标识
+        /// </summary>
         [MessagePart(Protocol.client_id, IsRequired=true)]
         public string ClientIdentifier { get; set; }
 
+        /// <summary>
+        /// 回调地址
+        /// </summary>
         [MessagePart(Protocol.redirect_uri, IsRequired=false)]
         public Uri Callback { get; set; }
 
+        /// <summary>
+        /// 客户端状态
+        /// </summary>
         [MessagePart(Protocol.state, IsRequired=false)]
         public string ClientState { get; set; }
 
+        /// <summary>
+        /// 范围
+        /// </summary>
         [MessagePart(Protocol.scope, IsRequired=false, Encoder=typeof(ScopeEncoder))]
         public HashSet<string> Scope { get; private set; }
 

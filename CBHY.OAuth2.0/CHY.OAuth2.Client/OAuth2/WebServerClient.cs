@@ -37,6 +37,13 @@ namespace CHY.OAuth2.Client.OAuth2
 
         public IClientAuthorizationTracker AuthorizationTracker { get; set; }
 
+        /// <summary>
+        /// 用户授权请求
+        /// </summary>
+        /// <param name="scopes">请求范围</param>
+        /// <param name="returnTo">回调地址</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public Task<HttpResponseMessage> PrepareRequestUserAuthorizationAsync(IEnumerable<string> scopes = null, Uri returnTo = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var authorizationState = new AuthorizationState(scopes)
@@ -46,8 +53,15 @@ namespace CHY.OAuth2.Client.OAuth2
             return this.PrepareRequestUserAuthorizationAsync(authorizationState, cancellationToken);
         }
 
+        /// <summary>
+        /// 用户授权请求
+        /// </summary>
+        /// <param name="authorization">授权状态</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<HttpResponseMessage> PrepareRequestUserAuthorizationAsync(IAuthorizationState authorization, CancellationToken cancellationToken = default(CancellationToken))
         {
+            // 设置回调地址
             if(authorization.Callback == null)
             {
                 authorization.Callback = this.Channel.GetRequestFromContext().GetPublicFacingUrl()
@@ -55,6 +69,8 @@ namespace CHY.OAuth2.Client.OAuth2
                     .StripMessagePartsFromQueryString(this.Channel.MessageDescriptions.Get(typeof(EndUserAuthorizationFailedResponse), Protocol.Default.Version));
                 authorization.SaveChanges();
             }
+
+            //授权请求
             var request = new EndUserAuthorizationRequestC(this.AuthorizationServer)
             {
                 ClientIdentifier = this.ClientIdentifier,

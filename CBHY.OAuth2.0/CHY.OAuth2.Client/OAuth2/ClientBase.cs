@@ -207,6 +207,11 @@ namespace CHY.OAuth2.Client.OAuth2
             }
         }
 
+        /// <summary>
+        /// 没有密码返回null，否则返回网络凭据
+        /// </summary>
+        /// <param name="secret"></param>
+        /// <returns></returns>
         protected static ClientCredentialApplicator DefaultSecretApplicator(string secret)
         {
             return secret == null ? ClientCredentialApplicator.NoSecret() : ClientCredentialApplicator.NetworkCredential(secret);

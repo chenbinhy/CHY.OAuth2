@@ -73,14 +73,7 @@ namespace CBHY.OAuth2.Controllers
              if(!string.IsNullOrEmpty(code))
             {
                 IAuthorizationState authorization = null;
-                try
-                {
-                    authorization = await Client.ProcessUserAuthorizationAsync(Request, Response.ClientDisconnectedToken);
-                }
-                 catch(Exception ex)
-                {
-                    throw ex;
-                }
+                authorization = await Client.ProcessUserAuthorizationAsync(Request, Response.ClientDisconnectedToken);
                 if (authorization != null)
                 {
                     // We are receiving an authorization response.  Store it and associate it with this user.

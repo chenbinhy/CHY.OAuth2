@@ -503,6 +503,13 @@ namespace CHY.OAuth2.Core.Messaging
             return response;
         }
 
+        /// <summary>
+        /// 重定向
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="fields"></param>
+        /// <param name="payloadInFragment"></param>
+        /// <returns></returns>
         protected virtual HttpResponseMessage Create301RedirectResponse(IDirectedProtocolMessage message, IDictionary<string,string> fields, bool payloadInFragment = false)
         {
             UriBuilder builder = new UriBuilder(message.Recipient);
