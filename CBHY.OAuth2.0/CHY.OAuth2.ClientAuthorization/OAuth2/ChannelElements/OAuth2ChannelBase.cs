@@ -18,6 +18,10 @@ namespace CHY.OAuth2.ClientAuthorization.OAuth2.ChannelElements
 
         }
 
+        /// <summary>
+        /// 去除空值字典
+        /// </summary>
+        /// <param name="fields"></param>
         protected override void FilterReceivedFields(IDictionary<string, string> fields)
         {
             base.FilterReceivedFields(fields);

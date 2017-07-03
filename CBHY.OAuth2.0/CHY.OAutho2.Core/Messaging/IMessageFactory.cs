@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CHY.OAuth2.Core.Messaging
 {
+    /// <summary>
+    /// 消息工厂
+    /// </summary>
     public interface IMessageFactory
     {
         IDirectedProtocolMessage GetNewRequestMessage(MessageReceivingEndpoint recipient, IDictionary<string, string> fields);

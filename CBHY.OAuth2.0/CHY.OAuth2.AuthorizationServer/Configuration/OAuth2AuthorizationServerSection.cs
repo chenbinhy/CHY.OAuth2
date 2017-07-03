@@ -10,17 +10,20 @@ using System.Threading.Tasks;
 
 namespace CHY.OAuth2.AuthorizationServer.Configuration
 {
+    /// <summary>
+    /// 授权服务配置节
+    /// </summary>
     public class OAuth2AuthorizationServerSection:ConfigurationSection
     {
         private const string SectionName = OAuth2SectionGroup.SectionName + "/authorizationServer";
         private const string ClientAuthenticationModulesElementName = "clientAuthenticationModules";
 
+        // 默认客户端认证模块
         private static readonly TypeConfigurationCollection<ClientAuthenticationModule> defaultClientAuthenticationModules =
             new TypeConfigurationCollection<ClientAuthenticationModule>(new Type[] { typeof(ClientCredentialHttpBasicReader), typeof(ClientCredentialMessagePartReader) });
 
         public OAuth2AuthorizationServerSection()
         {
-
         }
 
         public static OAuth2AuthorizationServerSection Configuration

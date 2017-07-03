@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CHY.OAuth2.OAuth2
 {
+    /// <summary>
+    /// 范围检测
+    /// </summary>
     public class StandardScopeSatisfiedCheck:IScopeSatisfiedCheck
     {
         public bool IsScopeSatisfied(HashSet<string> requiredScope, HashSet<string> grantedScope)

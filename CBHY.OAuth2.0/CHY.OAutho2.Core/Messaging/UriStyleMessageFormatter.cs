@@ -9,6 +9,10 @@ using System.Web;
 
 namespace CHY.OAuth2.Core.Messaging
 {
+    /// <summary>
+    /// Uri消息格式
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class UriStyleMessageFormatter<T>:DataBagFormatterBase<T> where T:DataBag
     {
         public UriStyleMessageFormatter(RSACryptoServiceProvider signingKey = null, RSACryptoServiceProvider encryptingKey = null, bool compressed = false, TimeSpan? maximumAge = null, INonceStore decodeOnceOnly = null)

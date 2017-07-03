@@ -18,8 +18,8 @@ namespace CHY.OAuth2.Core.Messaging
         private readonly TimeSpan minimumAge = TimeSpan.FromDays(1);
         private readonly ICryptoKeyStore cryptoKeyStore;
         private readonly string cryptoKeyBucket;
-        private readonly RSACryptoServiceProvider asymmetricSigning;
-        private readonly RSACryptoServiceProvider asymmetricEncrypting;
+        private readonly RSACryptoServiceProvider asymmetricSigning; // 签名
+        private readonly RSACryptoServiceProvider asymmetricEncrypting; // 加密
         private readonly bool signed;
         private readonly INonceStore decodeOnceOnly;
         private readonly TimeSpan? maximumAge;
@@ -53,26 +53,31 @@ namespace CHY.OAuth2.Core.Messaging
             this.compressed = compressed;
         }
 
+        /// <summary>
+        /// 序列化消息
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         public string Serialize(T message)
         {
             message.UtcCreationDate = DateTime.UtcNow;
             if(this.decodeOnceOnly != null)
             {
-                message.Nonce = MessagingUtilities.GetNonCryptoRandomData(NonceLenght);
+                message.Nonce = MessagingUtilities.GetNonCryptoRandomData(NonceLenght); // 获取随机字符
             }
 
             byte[] encoded = this.SerializeCore(message);
-            if(this.compressed)
+            if(this.compressed) // 压缩
             {
                 encoded = MessagingUtilities.Compress(encoded);
             }
 
             string symmetricSecretHandle = null;
-            if(this.encrypted)
+            if(this.encrypted) // 加密
             {
                 encoded = this.Encrypt(encoded, out symmetricSecretHandle);
             }
-            if(this.signed)
+            if(this.signed) // 签名
             {
                 message.Signature = this.CalculateSignature(encoded, symmetricSecretHandle);
             }

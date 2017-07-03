@@ -19,11 +19,13 @@ using System.Web;
 
 namespace CHY.OAuth2.AuthorizationServer.OAuth2
 {
+    /// <summary>
+    /// 授权服务
+    /// </summary>
     public class AuthorizationServer
     {
-        private static readonly IScopeSatisfiedCheck DefaultScopeSatisfiedCheck = new StandardScopeSatisfiedCheck();
-
-        private readonly List<ClientAuthenticationModule> clientAuthenticationModules = new List<ClientAuthenticationModule>();
+        private static readonly IScopeSatisfiedCheck DefaultScopeSatisfiedCheck = new StandardScopeSatisfiedCheck(); // 范围检测
+        private readonly List<ClientAuthenticationModule> clientAuthenticationModules = new List<ClientAuthenticationModule>(); // 客户端认证模块
         private readonly ClientAuthenticationModule aggregatingClientAuthenticationModule;
 
         public AuthorizationServer(IAuthorizationServerHost authorizationServer)

@@ -8,6 +8,9 @@ using System.Xml;
 
 namespace CHY.OAuth2.Core.Messaging
 {
+    /// <summary>
+    /// 消息序列化
+    /// </summary>
     public class MessageSerializer
     {
         private readonly Type messageType;

@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace CHY.OAuth2.Core.Messaging
 {
+    /// <summary>
+    /// 格式化数据袋
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public interface IDataBagFormatter<in T> where T:DataBag
     {
         string Serialize(T message);

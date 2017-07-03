@@ -9,8 +9,14 @@ using CHY.OAuth2.Core.Common;
 
 namespace CHY.OAuth2.Core.Messaging.Reflection
 {
+    /// <summary>
+    /// 消息描述
+    /// </summary>
     public class MessageDescription
     {
+        /// <summary>
+        /// 映射
+        /// </summary>
         private Dictionary<string, MessagePart> mapping;
 
         public MessageDescription(Type messageType, Version messageVersion)

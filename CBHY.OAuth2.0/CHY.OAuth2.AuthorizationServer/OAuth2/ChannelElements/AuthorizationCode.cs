@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace CHY.OAuth2.AuthorizationServer.OAuth2.ChannelElements
 {
+    /// <summary>
+    /// 授权码
+    /// </summary>
     public class AuthorizationCode:AuthorizationDataBag
     {
         public const string AuthorizationCodeKeyBucket = "https://localhost/dnoa/oauth_authorization_code";

@@ -380,6 +380,11 @@ namespace CHY.OAuth2.Core.Messaging
             dataBlob = keyHandleAndBlob.Substring(privateHandleIndex + 1);
         }
 
+        /// <summary>
+        /// 非加密随机数据
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
         public static byte[] GetNonCryptoRandomData(int length)
         {
             byte[] buffer = new byte[length];
@@ -736,6 +741,11 @@ namespace CHY.OAuth2.Core.Messaging
             }
         }
 
+        /// <summary>
+        /// 复制header内容
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="request"></param>
         public static void CopyHeadersFrom(this HttpRequestMessage message, HttpRequestBase request)
         {
             foreach(string headerName in request.Headers)

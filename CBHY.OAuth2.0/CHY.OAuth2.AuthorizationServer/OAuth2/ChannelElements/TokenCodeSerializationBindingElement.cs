@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace CHY.OAuth2.AuthorizationServer.OAuth2.ChannelElements
 {
+    /// <summary>
+    /// code序列化
+    /// </summary>
     public class TokenCodeSerializationBindingElement:AuthServerBindingElementBase
     {
         public override MessageProtections Protection

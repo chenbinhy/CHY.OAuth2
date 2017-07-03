@@ -9,13 +9,15 @@ using CHY.OAuth2.Core.Common;
 
 namespace CHY.OAuth2.Core.Messaging
 {
+    /// <summary>
+    /// 标准消息工厂
+    /// </summary>
     public class StandardMessageFactory : IMessageFactory
     {
         private readonly Dictionary<MessageDescription, ConstructorInfo> requestMessageTypes = new Dictionary<MessageDescription, ConstructorInfo>();
         private readonly Dictionary<MessageDescription, Dictionary<Type, ConstructorInfo>> responseMessageTypes = new Dictionary<MessageDescription, Dictionary<Type, ConstructorInfo>>();
         public StandardMessageFactory()
         {
-
         }
 
         public virtual void AddMessageTypes(IEnumerable<MessageDescription> messageTypes)

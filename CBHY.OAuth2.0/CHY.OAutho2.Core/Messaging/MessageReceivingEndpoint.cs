@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CHY.OAuth2.Core.Messaging
 {
+    /// <summary>
+    /// 消息接收终结点
+    /// </summary>
     public class MessageReceivingEndpoint
     {
         public MessageReceivingEndpoint(string locationUri, HttpDeliveryMethods method)

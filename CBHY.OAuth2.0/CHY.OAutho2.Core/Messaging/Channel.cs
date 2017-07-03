@@ -167,6 +167,13 @@ namespace CHY.OAuth2.Core.Messaging
             return result;
         }
 
+        /// <summary>
+        /// 异步读取httpRequest信息
+        /// </summary>
+        /// <typeparam name="TRequest"></typeparam>
+        /// <param name="httpRequest"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<TRequest> TryReadFromRequestAsync<TRequest>(HttpRequestMessage httpRequest, CancellationToken cancellationToken)
             where TRequest:class, IProtocolMessage
         {
@@ -265,6 +272,12 @@ namespace CHY.OAuth2.Core.Messaging
             return this.ProcessOutgoingMessageAsync(message, cancellationToken);
         }
 
+        /// <summary>
+        /// Form表单数据转换键值对
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public static async Task<IEnumerable<KeyValuePair<string, string>>> ParseUrlEncodedFormContentAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             if(request.Content !=null && request.Content.Headers.ContentType !=null
@@ -272,7 +285,7 @@ namespace CHY.OAuth2.Core.Messaging
             {
                 return HttpUtility.ParseQueryString(await request.Content.ReadAsStringAsync()).AsKeyValuePairs();
             }
-
+            
             return Enumerable.Empty<KeyValuePair<string, string>>();
         }
 
@@ -428,6 +441,12 @@ namespace CHY.OAuth2.Core.Messaging
 
         }
 
+        /// <summary>
+        /// HttpRequestMessage转换为IDirectedProtocolMessage
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         protected virtual async Task<IDirectedProtocolMessage> ReadFromRequestCoreAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             Logger.Channel.DebugFormat("Incoming HTTP request: {0} {1}", request.Method, request.RequestUri.AbsoluteUri);
@@ -456,8 +475,8 @@ namespace CHY.OAuth2.Core.Messaging
         protected virtual IProtocolMessage Receive(Dictionary<string,string> fields, MessageReceivingEndpoint recipient)
         {
             this.FilterReceivedFields(fields);
-                IProtocolMessage message = this.MessageFactory.GetNewRequestMessage(recipient, fields);
-            if(message == null)
+            IProtocolMessage message = this.MessageFactory.GetNewRequestMessage(recipient, fields);
+            if (message == null)
             {
                 return null;
             }
