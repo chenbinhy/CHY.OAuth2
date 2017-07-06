@@ -69,6 +69,12 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2
             return message;
         }
 
+        /// <summary>
+        /// 读取用户授权请求参数
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public Task<EndUserAuthorizationRequest> ReadAuthorizationRequestAsync(
             HttpRequestBase request = null, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -162,7 +168,7 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2
 
                     response = implicitGrantResponse;
                     break;
-                case EndUserAuthorizationResponseType.AuthorizationCode:
+                case EndUserAuthorizationResponseType.AuthorizationCode: // 授权码
                     var authCodeResponse = new EndUserAuthorizationSuccessAuthCodeResponseAS(callback, authorizationRequest);
                     IAuthorizationCodeCarryingRequest codeCarryingResponse = authCodeResponse;
                     codeCarryingResponse.AuthorizationDescription = new AuthorizationCode(

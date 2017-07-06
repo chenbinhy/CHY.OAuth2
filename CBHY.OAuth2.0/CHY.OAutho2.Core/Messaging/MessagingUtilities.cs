@@ -173,6 +173,12 @@ namespace CHY.OAuth2.Core.Messaging
             return result == 0;
         }
 
+        /// <summary>
+        /// 获取URI
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="serverVariables"></param>
+        /// <returns></returns>
         public static Uri GetPublicFacingUrl(this HttpRequestBase request, NameValueCollection serverVariables)
         {
             string httpHost;
@@ -213,6 +219,11 @@ namespace CHY.OAuth2.Core.Messaging
             return GetPublicFacingUrl(new HttpRequestWrapper(HttpContext.Current.Request));
         }
 
+        /// <summary>
+        /// 转换为HttpRequestMessage
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public static HttpRequestMessage AsHttpRequestMessage(this HttpRequestBase request)
         {
             Uri publicFacingUrl = request.GetPublicFacingUrl();

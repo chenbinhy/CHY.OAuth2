@@ -42,6 +42,11 @@ namespace CHY.OAuth2.Core.Messaging.Reflection
             return this.MessageType.Name + " (" + this.MessageVersion + ")";
         }
 
+        /// <summary>
+        /// 根据IMessage获取消息字典
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         public MessageDictionary GetDictionary(IMessage message)
         {
             return this.GetDictionary(message, false);

@@ -168,7 +168,7 @@ namespace CHY.OAuth2.Core.Messaging
         }
 
         /// <summary>
-        /// 异步读取httpRequest信息
+        /// 读取httpRequest信息转换为TRequest
         /// </summary>
         /// <typeparam name="TRequest"></typeparam>
         /// <param name="httpRequest"></param>
@@ -196,6 +196,12 @@ namespace CHY.OAuth2.Core.Messaging
             return request;
         }
 
+        /// <summary>
+        /// HttpRequestMessage装换未IDirectedProtocolMessage
+        /// </summary>
+        /// <param name="httpRequest"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<IDirectedProtocolMessage> ReadFromRequestAsync(HttpRequestMessage httpRequest, CancellationToken cancellationToken)
         {
             if (Logger.Channel.IsInfoEnabled() && httpRequest.RequestUri != null)
@@ -294,6 +300,10 @@ namespace CHY.OAuth2.Core.Messaging
             return new HttpContextWrapper(HttpContext.Current);
         }
 
+        /// <summary>
+        /// 封装当前请求上下文为HttpRequestWrapper
+        /// </summary>
+        /// <returns></returns>
         public virtual HttpRequestBase GetRequestFromContext()
         {
             Assumes.True(HttpContext.Current.Request.Url != null);
@@ -442,7 +452,7 @@ namespace CHY.OAuth2.Core.Messaging
         }
 
         /// <summary>
-        /// HttpRequestMessage转换为IDirectedProtocolMessage
+        /// HttpRequestMessage转换为IDirectedProtocolMessage，填充HttpRequestMessage参数值
         /// </summary>
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
@@ -475,7 +485,7 @@ namespace CHY.OAuth2.Core.Messaging
         protected virtual IProtocolMessage Receive(Dictionary<string,string> fields, MessageReceivingEndpoint recipient)
         {
             this.FilterReceivedFields(fields);
-            IProtocolMessage message = this.MessageFactory.GetNewRequestMessage(recipient, fields);
+            IProtocolMessage message = this.MessageFactory.GetNewRequestMessage(recipient, fields); // 创建对象实例
             if (message == null)
             {
                 return null;
@@ -483,8 +493,8 @@ namespace CHY.OAuth2.Core.Messaging
             var directedMessage = message as IDirectedProtocolMessage;
             ErrorUtilities.VerifyProtocol(recipient == null || (directedMessage != null && (recipient.AllowedMethods & directedMessage.HttpMethods) != 0), MessagingStrings.UnsupportedHttpVerbForMessageType, message.GetType().Name, recipient.AllowedMethods);
 
-            var messageAccessor = this.MessageDescriptions.GetAccessor(message);
-            messageAccessor.Deserialize(fields);
+            var messageAccessor = this.MessageDescriptions.GetAccessor(message); // 简单获取MessageDictionary
+            messageAccessor.Deserialize(fields); // 给对象填充参数值
 
             return message;
         }
@@ -637,7 +647,7 @@ namespace CHY.OAuth2.Core.Messaging
             {
                 this.OutgoingMessageFilter(message);
             }
-            if (Logger.Channel.IsInfoEnabled())
+            if (Logger.Channel.IsInfoEnabled()) // 日志
             {
                 var directedMessage = message as IDirectedProtocolMessage;
                 string recipient = (directedMessage != null && directedMessage.Recipient != null) ? directedMessage.Recipient.AbsoluteUri : "<response>";
@@ -717,7 +727,7 @@ namespace CHY.OAuth2.Core.Messaging
 
         protected virtual async Task ProcessIncomingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken)
         {
-            if (Logger.Channel.IsInfoEnabled())
+            if (Logger.Channel.IsInfoEnabled()) // 日志记录
             {
                 var messageAccessor = this.MessageDescriptions.GetAccessor(message, true);
                 Logger.Channel.InfoFormat(
@@ -762,7 +772,7 @@ namespace CHY.OAuth2.Core.Messaging
                 eventedMessage.OnReceiving();
             }
 
-            if (Logger.Channel.IsDebugEnabled())
+            if (Logger.Channel.IsDebugEnabled()) // 日志记录
             {
                 var messageAccessor = this.MessageDescriptions.GetAccessor(message);
                 Logger.Channel.DebugFormat(
@@ -810,7 +820,7 @@ namespace CHY.OAuth2.Core.Messaging
                 );
 
             bool wasLastProtectionPresent = true;
-            foreach(MessageProtections protectionKind in Enum.GetValues(typeof(MessageProtections)))
+            foreach(MessageProtections protectionKind in Enum.GetValues(typeof(MessageProtections))) // 保护级别，执行后一种保护时，也必须执行第一种
             {
                 if(protectionKind == MessageProtections.None)
                 {

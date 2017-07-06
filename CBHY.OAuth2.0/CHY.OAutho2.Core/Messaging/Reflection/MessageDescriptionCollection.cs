@@ -27,6 +27,12 @@ namespace CHY.OAuth2.Core.Messaging.Reflection
             return this.GetEnumerator();
         }
 
+        /// <summary>
+        /// 根据消息类型和版本获取消息描述
+        /// </summary>
+        /// <param name="messageType"></param>
+        /// <param name="messageVersion"></param>
+        /// <returns></returns>
         public MessageDescription Get(Type messageType, Version messageVersion)
         {
             MessageTypeAndVersion key = new MessageTypeAndVersion(messageType, messageVersion);
@@ -50,11 +56,21 @@ namespace CHY.OAuth2.Core.Messaging.Reflection
             return result;
         }
 
+        /// <summary>
+        /// 根据IMessage获取消息描述
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         public MessageDescription Get(IMessage message)
         {
             return this.Get(message.GetType(), message.Version);
         }
 
+        /// <summary>
+        /// 获取消息字典
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         public MessageDictionary GetAccessor(IMessage message)
         {
             return this.GetAccessor(message, false);

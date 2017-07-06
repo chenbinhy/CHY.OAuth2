@@ -68,6 +68,13 @@ namespace CHY.OAuth2.Core.Messaging
                 unsupportedMessageTypes.ToStringDeferred());
         }
 
+
+        /// <summary>
+        /// 转换为IDirectedProtocolMessage
+        /// </summary>
+        /// <param name="recipient"></param>
+        /// <param name="fields"></param>
+        /// <returns></returns>
         public virtual IDirectedProtocolMessage GetNewRequestMessage(MessageReceivingEndpoint recipient, IDictionary<string, string> fields)
         {
             MessageDescription matchingType = this.GetMessageDescription(recipient, fields);
@@ -94,6 +101,12 @@ namespace CHY.OAuth2.Core.Messaging
             }
         }
 
+        /// <summary>
+        /// 通过字段的匹配，找到对应的MessageDescription
+        /// </summary>
+        /// <param name="recipient"></param>
+        /// <param name="fields"></param>
+        /// <returns></returns>
         protected virtual MessageDescription GetMessageDescription(MessageReceivingEndpoint recipient, IDictionary<string,string> fields)
         {
             var matches = this.requestMessageTypes.Keys
@@ -148,6 +161,12 @@ namespace CHY.OAuth2.Core.Messaging
             }
         }
 
+        /// <summary>
+        /// 创建对应的实例
+        /// </summary>
+        /// <param name="messageDescripton"></param>
+        /// <param name="recipient"></param>
+        /// <returns></returns>
         protected virtual IDirectedProtocolMessage InstantiateAsRequest(MessageDescription messageDescripton, MessageReceivingEndpoint recipient)
         {
             ConstructorInfo ctor = this.requestMessageTypes[messageDescripton];
