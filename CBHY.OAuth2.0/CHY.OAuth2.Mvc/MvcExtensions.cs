@@ -27,7 +27,7 @@ namespace CHY.OAuth2.Mvc
 
             public override void ExecuteResult(ControllerContext context)
             {
-                this.response.SendAsync(context.HttpContext).GetAwaiter().GetResult();
+                this.response.SendAsync(context.HttpContext);
             }
         }
     }

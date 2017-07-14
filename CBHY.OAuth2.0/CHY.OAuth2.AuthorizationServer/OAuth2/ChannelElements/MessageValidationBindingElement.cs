@@ -32,7 +32,7 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2.ChannelElements
             get { return MessageProtections.None; }
         }
 
-        public override Task<MessageProtections?> ProcessOutgoingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken)
+        public override MessageProtections? ProcessOutgoingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken)
         {
             var accessTokenResponse = message as AccessTokenSuccessResponse;
             if(accessTokenResponse != null)
@@ -42,10 +42,10 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2.ChannelElements
                 ErrorUtilities.VerifyProtocol(accessTokenRequest.GrantType != GrantType.ClientCredentials || accessTokenResponse.RefreshToken == null, OAuthStrings.NoGrantNoRefreshToken);
             }
 
-            return MessageProtectionTasks.Null;
+            return null;
         }
 
-        public override Task<MessageProtections?> ProcessIncomingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken)
+        public override MessageProtections? ProcessIncomingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken)
         {
             bool applied = false;
             var clientCredentialOnly = message as AccessTokenClientCredentialsRequest;
@@ -169,7 +169,7 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2.ChannelElements
                 }
             }
 
-            return applied?MessageProtectionTasks.None:MessageProtectionTasks.Null;
+            return applied ? MessageProtections.None : MessageProtections.None;
         }
     }
 }

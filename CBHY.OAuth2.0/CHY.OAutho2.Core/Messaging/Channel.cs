@@ -126,9 +126,9 @@ namespace CHY.OAuth2.Core.Messaging
 
         protected virtual XmlDictionaryReaderQuotas XmlDictionaryReaderQuotas { get; set; }
 
-        public async Task<HttpResponseMessage> PrepareResponseAsync(IProtocolMessage message, CancellationToken cancellationToken = default(CancellationToken))
+        public HttpResponseMessage PrepareResponseAsync(IProtocolMessage message, CancellationToken cancellationToken = default(CancellationToken))
         {
-            await this.ProcessOutgoingMessageAsync(message, cancellationToken);
+            this.ProcessOutgoingMessageAsync(message, cancellationToken);
             Logger.Channel.DebugFormat("Sending message: {0}", message.GetType().Name);
 
             HttpResponseMessage result;
@@ -174,10 +174,10 @@ namespace CHY.OAuth2.Core.Messaging
         /// <param name="httpRequest"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<TRequest> TryReadFromRequestAsync<TRequest>(HttpRequestMessage httpRequest, CancellationToken cancellationToken)
+        public TRequest TryReadFromRequestAsync<TRequest>(HttpRequestMessage httpRequest, CancellationToken cancellationToken)
             where TRequest:class, IProtocolMessage
         {
-            IProtocolMessage untypeRequest = await this.ReadFromRequestAsync(httpRequest, cancellationToken);
+            IProtocolMessage untypeRequest = this.ReadFromRequestAsync(httpRequest, cancellationToken);
             if(untypeRequest == null)
             {
                 return null;
@@ -188,10 +188,10 @@ namespace CHY.OAuth2.Core.Messaging
             return request;
         }
 
-        public async Task<TRequest> ReadFromRequestAsync<TRequest>(HttpRequestMessage httpRequest, CancellationToken cancellationToken)
+        public TRequest ReadFromRequestAsync<TRequest>(HttpRequestMessage httpRequest, CancellationToken cancellationToken)
             where TRequest:class, IProtocolMessage
         {
-            TRequest request = await this.TryReadFromRequestAsync<TRequest>(httpRequest, cancellationToken);
+            TRequest request = this.TryReadFromRequestAsync<TRequest>(httpRequest, cancellationToken);
             ErrorUtilities.VerifyProtocol(request != null, MessagingStrings.ExpectedMessageNotReceived, typeof(TRequest));
             return request;
         }
@@ -202,13 +202,13 @@ namespace CHY.OAuth2.Core.Messaging
         /// <param name="httpRequest"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<IDirectedProtocolMessage> ReadFromRequestAsync(HttpRequestMessage httpRequest, CancellationToken cancellationToken)
+        public IDirectedProtocolMessage ReadFromRequestAsync(HttpRequestMessage httpRequest, CancellationToken cancellationToken)
         {
             if (Logger.Channel.IsInfoEnabled() && httpRequest.RequestUri != null)
             {
                 Logger.Channel.InfoFormat("Scanning incoming request for messages: {0}", httpRequest.RequestUri.AbsoluteUri);
             }
-            IDirectedProtocolMessage requestMessage = await this.ReadFromRequestCoreAsync(httpRequest, cancellationToken);
+            IDirectedProtocolMessage requestMessage = this.ReadFromRequestCoreAsync(httpRequest, cancellationToken);
             if(requestMessage != null)
             {
                 Logger.Channel.DebugFormat("Incoming request received: {0}", requestMessage.GetType().Name);
@@ -220,29 +220,29 @@ namespace CHY.OAuth2.Core.Messaging
                         directRequest.Headers.Add(header.Key, header.Value);
                     }
                 }
-                await this.ProcessIncomingMessageAsync(requestMessage, cancellationToken);
+                this.ProcessIncomingMessageAsync(requestMessage, cancellationToken);
             }
             return requestMessage;
         }
 
-        public async Task<TResponse> RequestAsync<TResponse>(IDirectedProtocolMessage requestMessage, CancellationToken cancellationToken)
+        public TResponse RequestAsync<TResponse>(IDirectedProtocolMessage requestMessage, CancellationToken cancellationToken)
             where TResponse:class, IProtocolMessage
         {
-            IProtocolMessage response = await this.RequestAsync(requestMessage, cancellationToken);
+            IProtocolMessage response = this.RequestAsync(requestMessage, cancellationToken);
             ErrorUtilities.VerifyProtocol(response != null, MessagingStrings.ExpectedMessageNotReceived, typeof(TResponse));
             var expectedResponse = response as TResponse;
             ErrorUtilities.VerifyProtocol(expectedResponse != null, MessagingStrings.UnexpectedMessageReceived, typeof(TResponse), response.GetType());
 
             return expectedResponse;
         }
-        public async Task<IProtocolMessage> RequestAsync(IDirectedProtocolMessage requestMessage, CancellationToken cancellationToken)
+        public IProtocolMessage RequestAsync(IDirectedProtocolMessage requestMessage, CancellationToken cancellationToken)
         {
-            await this.ProcessOutgoingMessageAsync(requestMessage, cancellationToken);
+            this.ProcessOutgoingMessageAsync(requestMessage, cancellationToken);
             Logger.Channel.DebugFormat("Sending {0} request.", requestMessage.GetType().Name);
-            var responseMessage = await this.RequestCoreAsync(requestMessage, cancellationToken);
+            var responseMessage = this.RequestCoreAsync(requestMessage, cancellationToken);
             ErrorUtilities.VerifyProtocol(responseMessage != null, MessagingStrings.ExpectedMessageNotReceived, typeof(IProtocolMessage).Name);
             Logger.Channel.DebugFormat("Received {0} response.", responseMessage.GetType().Name);
-            await this.ProcessIncomingMessageAsync(responseMessage, cancellationToken);
+            this.ProcessIncomingMessageAsync(responseMessage, cancellationToken);
 
             return responseMessage;
         }
@@ -253,9 +253,9 @@ namespace CHY.OAuth2.Core.Messaging
             GC.SuppressFinalize(this);
         }
 
-        public Task ProcessIncomingMessageTestHookAsync(IProtocolMessage message, CancellationToken cancellationToken)
+        public void ProcessIncomingMessageTestHookAsync(IProtocolMessage message, CancellationToken cancellationToken)
         {
-            return this.ProcessIncomingMessageAsync(message, cancellationToken);
+            this.ProcessIncomingMessageAsync(message, cancellationToken);
         }
 
         public HttpRequestMessage CreateHttpRequestTestHook(IDirectedProtocolMessage request)
@@ -268,14 +268,14 @@ namespace CHY.OAuth2.Core.Messaging
             return this.PrepareDirectResponse(response);
         }
 
-        public Task<IDictionary<string, string>> ReadFromResponseCoreAsyncTestHook(HttpResponseMessage response, CancellationToken cancellationToken)
+        public IDictionary<string, string> ReadFromResponseCoreAsyncTestHook(HttpResponseMessage response, CancellationToken cancellationToken)
         {
             return this.ReadFromResponseCoreAsyncTestHook(response, cancellationToken);
         }
 
-        public Task ProcessOutgoingMessageTestHookAsync(IProtocolMessage message, CancellationToken cancellationToken = default(CancellationToken))
+        public void ProcessOutgoingMessageTestHookAsync(IProtocolMessage message, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return this.ProcessOutgoingMessageAsync(message, cancellationToken);
+            this.ProcessOutgoingMessageAsync(message, cancellationToken);
         }
 
         /// <summary>
@@ -284,12 +284,12 @@ namespace CHY.OAuth2.Core.Messaging
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static async Task<IEnumerable<KeyValuePair<string, string>>> ParseUrlEncodedFormContentAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        public static IEnumerable<KeyValuePair<string, string>> ParseUrlEncodedFormContentAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             if(request.Content !=null && request.Content.Headers.ContentType !=null
                 && request.Content.Headers.ContentType.MediaType.Equals(HttpFormUrlEncoded))
             {
-                return HttpUtility.ParseQueryString(await request.Content.ReadAsStringAsync()).AsKeyValuePairs();
+                return HttpUtility.ParseQueryString(request.Content.ReadAsStringAsync().Result).AsKeyValuePairs();
             }
             
             return Enumerable.Empty<KeyValuePair<string, string>>();
@@ -389,7 +389,7 @@ namespace CHY.OAuth2.Core.Messaging
             }
         }
 
-        protected virtual async Task<IProtocolMessage> RequestCoreAsync(IDirectedProtocolMessage request, CancellationToken cancellationToken)
+        protected virtual IProtocolMessage RequestCoreAsync(IDirectedProtocolMessage request, CancellationToken cancellationToken)
         {
             if(this.OutgoingMessageFilter != null)
             {
@@ -412,11 +412,11 @@ namespace CHY.OAuth2.Core.Messaging
                 ServicePointManager.ServerCertificateValidationCallback =delegate(Object obj, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors) { return true; };
                 using (var httpClient = this.HostFactories.CreateHttpClient())
                 {
-                    using(var response = await httpClient.SendAsync(webRequest, cancellationToken))
+                    using(var response = httpClient.SendAsync(webRequest, cancellationToken).Result)
                     {
                         if(response.Content != null)
                         {
-                            var responseFields = await this.ReadFromResponseCoreAsync(response, cancellationToken);
+                            var responseFields = this.ReadFromResponseCoreAsync(response, cancellationToken);
                             if(responseFields != null)
                             {
                                 var responseMessage = this.MessageFactory.GetNewResponseMessage(request, responseFields);
@@ -432,7 +432,7 @@ namespace CHY.OAuth2.Core.Messaging
                         }
                         if(!response.IsSuccessStatusCode)
                         {
-                            var errorContent = (response.Content != null) ? await response.Content.ReadAsStringAsync() : null;
+                            var errorContent = (response.Content != null) ? response.Content.ReadAsStringAsync() : null;
                             Logger.Http.ErrorFormat(
                                 "Error received in HTTP response: {0} {1}\n{2}", (int)response.StatusCode, response.ReasonPhrase, errorContent);
                             response.EnsureSuccessStatusCode();
@@ -457,11 +457,11 @@ namespace CHY.OAuth2.Core.Messaging
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        protected virtual async Task<IDirectedProtocolMessage> ReadFromRequestCoreAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected virtual IDirectedProtocolMessage ReadFromRequestCoreAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             Logger.Channel.DebugFormat("Incoming HTTP request: {0} {1}", request.Method, request.RequestUri.AbsoluteUri);
             var fields = new Dictionary<string, string>();
-            fields.AddRange(await ParseUrlEncodedFormContentAsync(request, cancellationToken));
+            fields.AddRange(ParseUrlEncodedFormContentAsync(request, cancellationToken));
             if(fields.Count == 0 && request.Method.Method != "POST")
             {
                 fields.AddRange(HttpUtility.ParseQueryString(request.RequestUri.Query).AsKeyValuePairs());
@@ -587,7 +587,7 @@ namespace CHY.OAuth2.Core.Messaging
             }
         }
 
-        protected abstract Task<IDictionary<string, string>> ReadFromResponseCoreAsync(HttpResponseMessage response, CancellationToken cancellationToken);
+        protected abstract IDictionary<string, string> ReadFromResponseCoreAsync(HttpResponseMessage response, CancellationToken cancellationToken);
 
         protected virtual HttpRequestMessage CreateHttpRequest(IDirectedProtocolMessage request)
         {
@@ -612,7 +612,7 @@ namespace CHY.OAuth2.Core.Messaging
             return dictionary;
         }
 
-        protected async Task ProcessOutgoingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken)
+        protected void ProcessOutgoingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken)
         {
             Logger.Channel.DebugFormat("Preparing to send {0} ({1}) message.", message.GetType().Name, message.Version);
             this.OnSending(message);
@@ -625,7 +625,7 @@ namespace CHY.OAuth2.Core.Messaging
             foreach(IChannelBindingElement bindingElement in this.outgoingBindingElements)
             {
                 Assumes.True(bindingElement.Channel != null);
-                MessageProtections? elementProtection = await bindingElement.ProcessOutgoingMessageAsync(message, cancellationToken);
+                MessageProtections? elementProtection = bindingElement.ProcessOutgoingMessageAsync(message, cancellationToken);
                 if(elementProtection.HasValue)
                 {
                     Logger.Bindings.DebugFormat("Binding element {0} applied to message.", bindingElement.GetType().FullName);
@@ -725,7 +725,7 @@ namespace CHY.OAuth2.Core.Messaging
             return request;
         }
 
-        protected virtual async Task ProcessIncomingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken)
+        protected virtual void ProcessIncomingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken)
         {
             if (Logger.Channel.IsInfoEnabled()) // 日志记录
             {
@@ -746,7 +746,7 @@ namespace CHY.OAuth2.Core.Messaging
             foreach(IChannelBindingElement bindingElement in this.IncomingBindingElements)
             {
                 Assumes.True(bindingElement.Channel != null);
-                MessageProtections? elementProtection = await bindingElement.ProcessIncomingMessageAsync(message, cancellationToken);
+                MessageProtections? elementProtection = bindingElement.ProcessIncomingMessageAsync(message, cancellationToken);
                 if(elementProtection.HasValue)
                 {
                     Logger.Bindings.DebugFormat("Binding element {0} applied to message.", bindingElement.GetType().FullName);

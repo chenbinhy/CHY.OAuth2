@@ -54,9 +54,9 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2
             set { ((IOAuth2ChannelWithAuthorizationServer)this.Channel).ScopeSatisfiedCheck = value; }
         }
 
-        public async Task<EndUserAuthorizationRequest> ReadAuthorizationRequestAsync(HttpRequestMessage request, CancellationToken cancellationToken = default(CancellationToken))
+        public EndUserAuthorizationRequest ReadAuthorizationRequestAsync(HttpRequestMessage request, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var message = await this.Channel.TryReadFromRequestAsync<EndUserAuthorizationRequest>(request, cancellationToken);
+            var message = this.Channel.TryReadFromRequestAsync<EndUserAuthorizationRequest>(request, cancellationToken);
             if(message != null)
             {
                 if(message.ResponseType == EndUserAuthorizationResponseType.AuthorizationCode)
@@ -75,25 +75,25 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task<EndUserAuthorizationRequest> ReadAuthorizationRequestAsync(
+        public EndUserAuthorizationRequest ReadAuthorizationRequestAsync(
             HttpRequestBase request = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             request = request ?? this.Channel.GetRequestFromContext();
             return this.ReadAuthorizationRequestAsync(request.AsHttpRequestMessage(), cancellationToken);
         }
 
-        public Task<EndUserAuthorizationRequest> ReadAuthorizationRequestAsync(Uri requestUri, CancellationToken cancellationToken = default(CancellationToken))
+        public EndUserAuthorizationRequest ReadAuthorizationRequestAsync(Uri requestUri, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = new HttpRequestMessage(HttpMethod.Get, requestUri);
             return this.ReadAuthorizationRequestAsync(request, cancellationToken);
         }
 
-        public async Task<HttpResponseMessage> HandleTokenRequestAsync(HttpRequestMessage request, CancellationToken cancellationToken = default(CancellationToken))
+        public HttpResponseMessage HandleTokenRequestAsync(HttpRequestMessage request, CancellationToken cancellationToken = default(CancellationToken))
         {
             IProtocolMessage responseMessage;
             try
             {
-                AccessTokenRequestBase requestMessage = await this.Channel.TryReadFromRequestAsync<AccessTokenRequestBase>(request, cancellationToken);
+                AccessTokenRequestBase requestMessage = this.Channel.TryReadFromRequestAsync<AccessTokenRequestBase>(request, cancellationToken);
                 if(requestMessage != null)
                 {
                     var accessTokenResult = this.AuthorizationServerServices.CreateAccessToken(requestMessage);
@@ -124,10 +124,10 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2
                 responseMessage = new AccessTokenFailedResponse() { Error = Protocol.AccessTokenRequestErrorCodes.InvalidRequest };
             }
 
-            return await this.Channel.PrepareResponseAsync(responseMessage, cancellationToken);
+            return this.Channel.PrepareResponseAsync(responseMessage, cancellationToken);
         }
 
-        public Task<HttpResponseMessage> HandleTokenRequestAsync(HttpRequestBase request = null, CancellationToken cancellationToken = default(CancellationToken))
+        public HttpResponseMessage HandleTokenRequestAsync(HttpRequestBase request = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             request = request??this.Channel.GetRequestFromContext();
             return this.HandleTokenRequestAsync(request.AsHttpRequestMessage(), cancellationToken);

@@ -240,7 +240,7 @@ namespace CHY.OAuth2.Core.Messaging
             return httpRequest;
         }
 
-        public static async Task SendAsync(this HttpResponseMessage response, HttpContextBase context = null, CancellationToken cancellationToken = default(CancellationToken))
+        public static void SendAsync(this HttpResponseMessage response, HttpContextBase context = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if(context == null)
             {
@@ -259,7 +259,7 @@ namespace CHY.OAuth2.Core.Messaging
             }
             if(response.Content != null)
             {
-                await response.Content.CopyToAsync(responseContext.OutputStream).ConfigureAwait(false);
+                response.Content.CopyToAsync(responseContext.OutputStream).ConfigureAwait(false);
             }
         }
 

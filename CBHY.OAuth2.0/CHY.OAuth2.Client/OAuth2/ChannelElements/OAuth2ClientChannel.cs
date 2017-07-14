@@ -60,9 +60,9 @@ namespace CHY.OAuth2.Client.OAuth2.ChannelElements
             return httpRequest;
         }
 
-        protected override async Task<IDictionary<string, string>> ReadFromResponseCoreAsync(HttpResponseMessage response, System.Threading.CancellationToken cancellationToken)
+        protected override IDictionary<string, string> ReadFromResponseCoreAsync(HttpResponseMessage response, System.Threading.CancellationToken cancellationToken)
         {
-            string body = await response.Content.ReadAsStringAsync();
+            string body = response.Content.ReadAsStringAsync().Result;
             var contentType = response.Content.Headers.ContentType.MediaType;
             if(contentType == JsonEncoded || contentType == JsonTextEncoded)
             {
@@ -78,7 +78,7 @@ namespace CHY.OAuth2.Client.OAuth2.ChannelElements
             }
         }
 
-        protected override Task<IDirectedProtocolMessage> ReadFromRequestCoreAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
+        protected override IDirectedProtocolMessage ReadFromRequestCoreAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
         {
             Logger.Channel.DebugFormat("Incoming HTTP request: {0} {1}", request.Method, request.RequestUri.AbsoluteUri);
             var fields = HttpUtility.ParseQueryString(request.RequestUri.Query).ToDictionary();
@@ -101,7 +101,7 @@ namespace CHY.OAuth2.Client.OAuth2.ChannelElements
                 return null;
             }
 
-            return Task.FromResult((IDirectedProtocolMessage)this.Receive(fields, recipient));
+            return (IDirectedProtocolMessage)this.Receive(fields, recipient);
         }
 
         protected override HttpResponseMessage PrepareDirectResponse(IProtocolMessage response)

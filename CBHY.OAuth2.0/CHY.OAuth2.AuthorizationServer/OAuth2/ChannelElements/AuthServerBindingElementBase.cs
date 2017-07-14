@@ -28,8 +28,8 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2.ChannelElements
             get { return ((IOAuth2ChannelWithAuthorizationServer)this.Channel).AuthorizationServer; }
         }
 
-        public abstract Task<MessageProtections?> ProcessOutgoingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken);
+        public abstract MessageProtections? ProcessOutgoingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken);
 
-        public abstract Task<MessageProtections?> ProcessIncomingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken);
+        public abstract MessageProtections? ProcessIncomingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken);
     }
 }

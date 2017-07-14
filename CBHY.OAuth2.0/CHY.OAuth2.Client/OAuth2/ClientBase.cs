@@ -64,19 +64,19 @@ namespace CHY.OAuth2.Client.OAuth2
             OAuthUtilities.AuthorizeWithBearerToken(requestHeaders, accessToken);
         }
 
-        public Task AuthorizeRequestAsync(HttpWebRequest request, IAuthorizationState authorization, CancellationToken cancellationToken)
+        public void AuthorizeRequestAsync(HttpWebRequest request, IAuthorizationState authorization, CancellationToken cancellationToken)
         {
-            return this.AuthorizeRequestAsync(request.Headers, authorization, cancellationToken);
+            this.AuthorizeRequestAsync(request.Headers, authorization, cancellationToken);
         }
 
-        public async Task AuthorizeRequestAsync(WebHeaderCollection requestHeaders, IAuthorizationState authorization, CancellationToken cancellationToken)
+        public void AuthorizeRequestAsync(WebHeaderCollection requestHeaders, IAuthorizationState authorization, CancellationToken cancellationToken)
         {
             ErrorUtilities.VerifyProtocol(!authorization.AccessTokenExpirationUtc.HasValue || authorization.AccessTokenExpirationUtc >= DateTime.UtcNow || authorization.RefreshToken != null, ClientStrings.AuthorizationExpired);
 
             if(authorization.AccessTokenExpirationUtc.HasValue && authorization.AccessTokenExpirationUtc.Value < DateTime.UtcNow)
             {
                 ErrorUtilities.VerifyProtocol(authorization.RefreshToken != null, ClientStrings.AccessTokenRefreshFailed);
-                await this.RefreshAuthorizationAsync(authorization, cancellationToken: cancellationToken);
+                this.RefreshAuthorizationAsync(authorization, cancellationToken: cancellationToken);
             }
             AuthorizeRequest(requestHeaders, authorization.AccessToken);
         }
@@ -91,7 +91,7 @@ namespace CHY.OAuth2.Client.OAuth2
             return new BearerTokenHttpMessageHandler(this, authorization, innerHandler ?? new HttpClientHandler());
         }
 
-        public async Task<bool> RefreshAuthorizationAsync(IAuthorizationState authorization, TimeSpan? skipIfUsefulLifeExceeds = null, CancellationToken cancellationToken = default(CancellationToken))
+        public bool RefreshAuthorizationAsync(IAuthorizationState authorization, TimeSpan? skipIfUsefulLifeExceeds = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if(skipIfUsefulLifeExceeds.HasValue && authorization.AccessTokenExpirationUtc.HasValue)
             {
@@ -108,13 +108,13 @@ namespace CHY.OAuth2.Client.OAuth2
                 RefreshToken = authorization.RefreshToken
             };
             this.ApplyClientCredential(request);
-            var response = await this.Channel.RequestAsync<AccessTokenSuccessResponse>(request, cancellationToken);
+            var response = this.Channel.RequestAsync<AccessTokenSuccessResponse>(request, cancellationToken);
             UpdateAuthorizationWithResponse(authorization, response);
 
             return true;
         }
 
-        public async Task<IAuthorizationState> GetScopedAccessTokenAsync(string refreshToken, HashSet<string> scope, CancellationToken cancellationToken)
+        public IAuthorizationState GetScopedAccessTokenAsync(string refreshToken, HashSet<string> scope, CancellationToken cancellationToken)
         {
             var request = new AccessTokenRefreshRequestC(this.AuthorizationServer)
             {
@@ -122,14 +122,14 @@ namespace CHY.OAuth2.Client.OAuth2
                 RefreshToken = refreshToken
             };
             this.ApplyClientCredential(request);
-            var response = await this.Channel.RequestAsync<AccessTokenSuccessResponse>(request, cancellationToken);
+            var response = this.Channel.RequestAsync<AccessTokenSuccessResponse>(request, cancellationToken);
             var authorization = new AuthorizationState();
             UpdateAuthorizationWithResponse(authorization, response);
 
             return authorization;
         }
 
-        public Task<IAuthorizationState> ExchangeUserCredentialForTokenAsync(string userName, string password, IEnumerable<string> scopes = null, CancellationToken cancellationToken=default(CancellationToken))
+        public IAuthorizationState ExchangeUserCredentialForTokenAsync(string userName, string password, IEnumerable<string> scopes = null, CancellationToken cancellationToken=default(CancellationToken))
         {
             var request = new AccessTokenResourceOwnerPasswordCredentialsRequest(this.AuthorizationServer.TokenEndpoint, this.AuthorizationServer.Version)
             {
@@ -140,7 +140,7 @@ namespace CHY.OAuth2.Client.OAuth2
             return this.RequestAccessTokenAsync(request, scopes, cancellationToken);
         }
 
-        public Task<IAuthorizationState> GetClientAccessTokenAsync(IEnumerable<string> scopes = null, CancellationToken cancellationToken = default(CancellationToken))
+        public IAuthorizationState GetClientAccessTokenAsync(IEnumerable<string> scopes = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var request = new AccessTokenClientCredentialsRequest(this.AuthorizationServer.TokenEndpoint, this.AuthorizationServer.Version);
 
@@ -183,7 +183,7 @@ namespace CHY.OAuth2.Client.OAuth2
             authorizationState.SaveChanges();
         }
 
-        public async Task UpdateAuthorizationWithResponseAsync(IAuthorizationState authorizationState, EndUserAuthorizationSuccessAuthCodeResponse authorizationSuccess, CancellationToken cancellationToken)
+        public void UpdateAuthorizationWithResponseAsync(IAuthorizationState authorizationState, EndUserAuthorizationSuccessAuthCodeResponse authorizationSuccess, CancellationToken cancellationToken)
         {
             var accessTokenRequest = new AccessTokenAuthorizationCodeRequestC(this.AuthorizationServer)
             {
@@ -192,7 +192,7 @@ namespace CHY.OAuth2.Client.OAuth2
                 AuthorizationCode= authorizationSuccess.AuthorizationCode
             };
             this.ApplyClientCredential(accessTokenRequest);
-            IProtocolMessage accessTokenResponse = await this.Channel.RequestAsync(accessTokenRequest, cancellationToken);
+            IProtocolMessage accessTokenResponse = this.Channel.RequestAsync(accessTokenRequest, cancellationToken);
             var accessTokenSuccess = accessTokenResponse as AccessTokenSuccessResponse;
             var failedAccessTokenResponse = accessTokenResponse as AccessTokenFailedResponse;
             if(accessTokenSuccess != null)
@@ -234,14 +234,14 @@ namespace CHY.OAuth2.Client.OAuth2
             return proportionLifetimeRemaining;
         }
 
-        private async Task<IAuthorizationState> RequestAccessTokenAsync(ScopedAccessTokenRequest request, IEnumerable<string> scopes, CancellationToken cancellationToken)
+        private IAuthorizationState RequestAccessTokenAsync(ScopedAccessTokenRequest request, IEnumerable<string> scopes, CancellationToken cancellationToken)
         {
             var authorizationState = new AuthorizationState(scopes);
             request.ClientIdentifier = this.ClientIdentifier;
             this.ApplyClientCredential(request);
             request.Scope.UnionWith(authorizationState.Scope);
 
-            var response = await this.Channel.RequestAsync(request, cancellationToken);
+            var response = this.Channel.RequestAsync(request, cancellationToken);
             var success = response as AccessTokenSuccessResponse;
             var failure = response as AccessTokenFailedResponse;
             ErrorUtilities.VerifyProtocol(success != null || failure != null, MessagingStrings.UnexpectedMessageReceivedOfMany);

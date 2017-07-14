@@ -30,7 +30,7 @@ namespace CHY.OAuth2.Client.OAuth2
         public IAuthorizationState Authorization { get; private set; }
         public ClientBase Client { get; private set; }
 
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             string bearerToken = this.BearerToken;
             if(bearerToken == null)
@@ -39,12 +39,12 @@ namespace CHY.OAuth2.Client.OAuth2
                 if(this.Authorization.AccessTokenExpirationUtc.HasValue && this.Authorization.AccessTokenExpirationUtc.Value < DateTime.UtcNow)
                 {
                     ErrorUtilities.VerifyProtocol(this.Authorization.RefreshToken != null, ClientStrings.AccessTokenRefreshFailed);
-                    await this.Client.RefreshAuthorizationAsync(this.Authorization, cancellationToken: cancellationToken);
+                    this.Client.RefreshAuthorizationAsync(this.Authorization, cancellationToken: cancellationToken);
                 }
                 bearerToken = this.Authorization.AccessToken;
             }
             request.Headers.Authorization = new AuthenticationHeaderValue(Protocol.BearerHttpAuthorizationScheme, bearerToken);
-            return await base.SendAsync(request, cancellationToken);
+            return base.SendAsync(request, cancellationToken);
         }
     }
 }

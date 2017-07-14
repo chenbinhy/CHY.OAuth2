@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http.Controllers;
 
@@ -16,7 +17,7 @@ namespace CBHY.OAuth2.OAuthResourceServer.Code
         {
             m_ResourceServer = resourceServer;
         }
-        protected override System.Threading.Tasks.Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
         {
             HttpContextBase httpContext;
             string userName;

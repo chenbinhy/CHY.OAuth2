@@ -191,12 +191,12 @@ namespace CHY.OAuth2.Core
             }
         }
 
-        public static async Task<Dictionary<TSource, TResult>> ToDictionaryAsync<TSource, TResult>(
+        public static Dictionary<TSource, TResult> ToDictionaryAsync<TSource, TResult>(
             this IEnumerable<TSource> source, Func<TSource, Task<TResult>> transform
             )
         {
             var taskResults = source.ToDictionary(s => s, transform);
-            await Task.WhenAll(taskResults.Values);
+             Task.WhenAll(taskResults.Values);
             return taskResults.ToDictionary(p => p.Key, p => p.Value.Result);
         }
 

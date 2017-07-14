@@ -38,7 +38,7 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2.ChannelElements
 
         public IScopeSatisfiedCheck ScopeSatisfiedCheck { get; set; }
 
-        protected override Task<IDictionary<string, string>> ReadFromResponseCoreAsync(HttpResponseMessage response, CancellationToken cancellationToken)
+        protected override IDictionary<string, string> ReadFromResponseCoreAsync(HttpResponseMessage response, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
@@ -53,7 +53,7 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2.ChannelElements
             return webResponse;
         }
 
-        protected override async Task<IDirectedProtocolMessage> ReadFromRequestCoreAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override IDirectedProtocolMessage ReadFromRequestCoreAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             if(!string.IsNullOrEmpty(request.RequestUri.Fragment))
             {
@@ -70,7 +70,7 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2.ChannelElements
                 }
                 return (IDirectedProtocolMessage)this.Receive(fields, recipient);
             }
-            var result = await base.ReadFromRequestCoreAsync(request, cancellationToken);
+            var result = base.ReadFromRequestCoreAsync(request, cancellationToken);
             return result;
         }
 

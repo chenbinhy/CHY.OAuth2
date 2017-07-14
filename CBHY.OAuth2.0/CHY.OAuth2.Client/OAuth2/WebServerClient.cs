@@ -44,7 +44,7 @@ namespace CHY.OAuth2.Client.OAuth2
         /// <param name="returnTo">回调地址</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task<HttpResponseMessage> PrepareRequestUserAuthorizationAsync(IEnumerable<string> scopes = null, Uri returnTo = null, CancellationToken cancellationToken = default(CancellationToken))
+        public HttpResponseMessage PrepareRequestUserAuthorizationAsync(IEnumerable<string> scopes = null, Uri returnTo = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var authorizationState = new AuthorizationState(scopes)
             {
@@ -59,7 +59,7 @@ namespace CHY.OAuth2.Client.OAuth2
         /// <param name="authorization">授权状态</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<HttpResponseMessage> PrepareRequestUserAuthorizationAsync(IAuthorizationState authorization, CancellationToken cancellationToken = default(CancellationToken))
+        public HttpResponseMessage PrepareRequestUserAuthorizationAsync(IAuthorizationState authorization, CancellationToken cancellationToken = default(CancellationToken))
         {
             // 设置回调地址
             if(authorization.Callback == null)
@@ -88,13 +88,13 @@ namespace CHY.OAuth2.Client.OAuth2
                 });
                 request.ClientState = xsrfKey;
             }
-            var response = await this.Channel.PrepareResponseAsync(request, cancellationToken);
+            var response = this.Channel.PrepareResponseAsync(request, cancellationToken);
             response.Headers.AddCookies(cookies);
 
             return response;
         }
 
-        public Task<IAuthorizationState> ProcessUserAuthorizationAsync(
+        public IAuthorizationState ProcessUserAuthorizationAsync(
             HttpRequestBase request = null, CancellationToken cancellationToken = default(CancellationToken)
             )
         {
@@ -102,9 +102,9 @@ namespace CHY.OAuth2.Client.OAuth2
             return this.ProcessUserAuthorizationAsync(request.AsHttpRequestMessage(), cancellationToken);
         }
 
-        public async Task<IAuthorizationState> ProcessUserAuthorizationAsync(HttpRequestMessage request, CancellationToken cancellationToken = default(CancellationToken))
+        public IAuthorizationState ProcessUserAuthorizationAsync(HttpRequestMessage request, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var response = await this.Channel.TryReadFromRequestAsync<IMessageWithClientState>(request, cancellationToken);
+            var response = this.Channel.TryReadFromRequestAsync<IMessageWithClientState>(request, cancellationToken);
             if(response != null)
             {
                 Uri callback = request.RequestUri.StripMessagePartsFromQueryString(this.Channel.MessageDescriptions.Get(response));
@@ -128,7 +128,7 @@ namespace CHY.OAuth2.Client.OAuth2
                 ErrorUtilities.VerifyProtocol(success != null || failure != null, MessagingStrings.UnexpectedMessageReceivedOfMany);
                 if(success != null)
                 {
-                    await this.UpdateAuthorizationWithResponseAsync(authorizationState, success, cancellationToken);
+                    this.UpdateAuthorizationWithResponseAsync(authorizationState, success, cancellationToken);
                 }
                 else
                 {

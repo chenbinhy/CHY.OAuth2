@@ -68,12 +68,12 @@ namespace CBHY.OAuth2.Controllers
             return View();
         }
 
-        public async Task GetAuthorization(string code)
+        public void GetAuthorization(string code)
         {
              if(!string.IsNullOrEmpty(code))
             {
                 IAuthorizationState authorization = null;
-                authorization = await Client.ProcessUserAuthorizationAsync(Request, Response.ClientDisconnectedToken);
+                authorization = Client.ProcessUserAuthorizationAsync(Request, Response.ClientDisconnectedToken);
                 if (authorization != null)
                 {
                     // We are receiving an authorization response.  Store it and associate it with this user.
@@ -96,8 +96,8 @@ namespace CBHY.OAuth2.Controllers
                 }
             }
             string[] scopes = new string[] { "https://resourceserver.oauth.com/api/Person/Name", "https://resourceserver.oauth.com/api/Person/Age" };
-            var request = await Client.PrepareRequestUserAuthorizationAsync(scopes,cancellationToken:Response.ClientDisconnectedToken);
-            await request.SendAsync();
+            var request = Client.PrepareRequestUserAuthorizationAsync(scopes,cancellationToken:Response.ClientDisconnectedToken);
+            request.SendAsync();
             this.HttpContext.Response.End();
         }
 
@@ -106,14 +106,14 @@ namespace CBHY.OAuth2.Controllers
             return View();
         }
 
-        public async Task<JsonResult> GetName()
+        public JsonResult GetName()
         {
-            string result = await this.CallService("https://resourceserver.oauth.com/api/Person/Name");
+            string result = this.CallService("https://resourceserver.oauth.com/api/Person/Name");
 
             return Json(result);
         }
 
-        private async Task<string> CallService(string url)
+        private string CallService(string url)
         {
             if (Authorization == null)
             {
@@ -123,7 +123,7 @@ namespace CBHY.OAuth2.Controllers
             if(Authorization.AccessTokenExpirationUtc.HasValue)
             {
                 // 刷新access token
-                await Client.RefreshAuthorizationAsync(Authorization, TimeSpan.FromSeconds(30));
+                Client.RefreshAuthorizationAsync(Authorization, TimeSpan.FromSeconds(30));
             }
 
             var httpRequest = (HttpWebRequest)WebRequest.Create(url);

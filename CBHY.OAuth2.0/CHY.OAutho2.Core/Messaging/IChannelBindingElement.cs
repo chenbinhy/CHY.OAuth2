@@ -13,8 +13,8 @@ namespace CHY.OAuth2.Core.Messaging
 
         MessageProtections Protection { get; }
 
-        Task<MessageProtections?> ProcessOutgoingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken);
+        MessageProtections? ProcessOutgoingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken);
 
-        Task<MessageProtections?> ProcessIncomingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken);
+        MessageProtections? ProcessIncomingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken);
     }
 }

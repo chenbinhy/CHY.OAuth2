@@ -34,7 +34,7 @@ namespace CBHY.OAuth2.AuthorizetionServer.Controllers
             return View();
         }
 
-        public async Task<string> Test()
+        public string Test()
         {
             return "";
         }

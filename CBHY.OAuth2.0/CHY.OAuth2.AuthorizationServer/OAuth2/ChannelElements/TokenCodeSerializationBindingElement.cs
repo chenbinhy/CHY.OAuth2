@@ -22,7 +22,7 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2.ChannelElements
             get { return MessageProtections.None; }
         }
 
-        public override Task<MessageProtections?> ProcessOutgoingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken)
+        public override MessageProtections? ProcessOutgoingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken)
         {
             var directResponse = message as IDirectResponseProtocolMessage;
             var request = directResponse != null ? directResponse.OriginatingRequest as IAccessTokenRequestInternal : null;
@@ -32,7 +32,7 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2.ChannelElements
                 var codeFormatter = AuthorizationCode.CreateFormatter(this.AuthorizationServer);
                 var code = authCodeCarrier.AuthorizationDescription;
                 authCodeCarrier.Code = codeFormatter.Serialize(code);
-                return MessageProtectionTasks.None;
+                return MessageProtections.None;
             }
 
             var refreshTokenResponse = message as AccessTokenSuccessResponse;
@@ -50,10 +50,10 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2.ChannelElements
                 ErrorUtilities.VerifyInternal(request != null, "We should always have a direct request message for this case.");
                 accessTokenResponse.AccessToken = accessTokenResponse.AuthorizationDescription.Serialize();
             }
-            return MessageProtectionTasks.Null;
+            return null;
         }
 
-        public override Task<MessageProtections?> ProcessIncomingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken)
+        public override MessageProtections? ProcessIncomingMessageAsync(IProtocolMessage message, CancellationToken cancellationToken)
         {
             var authCodeCarrier = message as IAuthorizationCodeCarryingRequest;
             if(authCodeCarrier != null)
@@ -72,7 +72,7 @@ namespace CHY.OAuth2.AuthorizationServer.OAuth2.ChannelElements
                 refreshTokenCarrier.AuthorizationDescription = refreshToken;
             }
 
-            return MessageProtectionTasks.Null;
+            return null;
         }
     }
 }
